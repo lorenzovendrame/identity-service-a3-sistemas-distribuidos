@@ -1,7 +1,7 @@
-package com.lorenzovendrame.identityservice.repository;
+package com.lorenzovendrame.identityservice.mapper;
 
-import com.lorenzovendrame.identityservice.repository.domain.Address;
-import com.lorenzovendrame.identityservice.repository.domain.User;
+import com.lorenzovendrame.identityservice.domain.Address;
+import com.lorenzovendrame.identityservice.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import java.util.Optional;
