@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ingresso.userservice.mapper.UserMapper">
+<mapper namespace="com.lorenzovendrame.identityservice.mapper.UserMapper">
 
     <insert id="insertAddress" keyProperty="addressId">
         INSERT INTO Address (address.address_id, city, state, district, cep, street_name, building_number, details)
-        VALUES (#{addressId, typeHandler=com.ingresso.userservice.config.UuidBinaryTypeHandler}, #{city}, #{state},
+        VALUES (#{addressId, typeHandler=com.lorenzovendrame.identityservice.config.UuidBinaryTypeHandler}, #{city}, #{state},
                 #{district}, #{cep}, #{streetName}, #{buildingNumber}, #{details})
     </insert>
 
     <insert id="insertUser" keyProperty="userId">
         INSERT INTO Users (user_id, name, cpf, address_id, email, phone_number, date_of_birth, password, created_at)
-        VALUES (#{userId, typeHandler=com.ingresso.userservice.config.UuidBinaryTypeHandler}, #{name}, #{cpf},
+        VALUES (#{userId, typeHandler=com.lorenzovendrame.identityservice.config.UuidBinaryTypeHandler}, #{name}, #{cpf},
                 #{address.addressId}, #{email}, #{phoneNumber}, #{dateOfBirth}, #{password}, NOW())
     </insert>
 
     <insert id="insertUserRole">
         INSERT INTO User_Roles (user_id, role_id)
-        VALUES (#{userId, typeHandler=com.ingresso.userservice.config.UuidBinaryTypeHandler}, #{roleId})
+        VALUES (#{userId, typeHandler=com.lorenzovendrame.identityservice.config.UuidBinaryTypeHandler}, #{roleId})
     </insert>
 
     <update id="updateUser">
         UPDATE Users
         SET name = #{name}, phone_number = #{phoneNumber}, email = #{email}
-        WHERE user_id = #{userId, typeHandler=com.ingresso.userservice.config.UuidBinaryTypeHandler}
+        WHERE user_id = #{userId, typeHandler=com.lorenzovendrame.identityservice.config.UuidBinaryTypeHandler}
     </update>
 
     <update id="updateAddress">
         UPDATE Address
         SET city = #{city}, state = #{state}, district = #{district}, cep = #{cep},
             street_name = #{streetName}, building_number = #{buildingNumber}, details = #{details}
-        WHERE address_id = #{addressId, typeHandler=com.ingresso.userservice.config.UuidBinaryTypeHandler}
+        WHERE address_id = #{addressId, typeHandler=com.lorenzovendrame.identityservice.config.UuidBinaryTypeHandler}
     </update>
 
     <delete id="deleteUserRoles">
         DELETE FROM User_Roles
-               WHERE user_id = #{userId, typeHandler=com.ingresso.userservice.config.UuidBinaryTypeHandler}
+               WHERE user_id = #{userId, typeHandler=com.lorenzovendrame.identityservice.config.UuidBinaryTypeHandler}
     </delete>
 
     <!-- Mapeamento de Resultado Complexo (User -> Address -> Roles -> Permissions) -->
-    <resultMap id="UserResultMap" type="com.ingresso.userservice.domain.User">
-        <id property="userId" column="user_id" typeHandler="com.ingresso.userservice.config.UuidBinaryTypeHandler"/>
+    <resultMap id="UserResultMap" type="com.lorenzovendrame.identityservice.domain.User">
+        <id property="userId" column="user_id" typeHandler="com.lorenzovendrame.identityservice.config.UuidBinaryTypeHandler"/>
         <result property="name" column="name"/>
         <result property="cpf" column="cpf"/>
         <result property="email" column="email"/>
@@ -49,8 +49,8 @@
         <result property="createdAt" column="created_at"/>
 
         <!-- Associação 1:1 com Endereço -->
-        <association property="address" javaType="com.ingresso.userservice.domain.Address">
-            <id property="addressId" column="address_id" typeHandler="com.ingresso.userservice.config.UuidBinaryTypeHandler"/>
+        <association property="address" javaType="com.lorenzovendrame.identityservice.domain.Address">
+            <id property="addressId" column="address_id" typeHandler="com.lorenzovendrame.identityservice.config.UuidBinaryTypeHandler"/>
             <result property="city" column="city"/>
             <result property="state" column="state"/>
             <result property="cep" column="cep"/>
@@ -58,7 +58,7 @@
         </association>
 
         <!-- Coleção 1:N com Roles -->
-        <collection property="roles" ofType="com.ingresso.userservice.domain.Role">
+        <collection property="roles" ofType="com.lorenzovendrame.identityservice.Role">
             <id property="roleId" column="role_id"/>
             <result property="roleName" column="role_name"/>
             <collection property="permissions" ofType="com.ingresso.userservice.domain.Permission">
@@ -76,7 +76,7 @@
                  LEFT JOIN Roles r ON ur.role_id = r.role_id
                  LEFT JOIN Role_Permissions rp ON r.role_id = rp.role_id
                  LEFT JOIN Permissions p ON rp.permission_id = p.permission_id
-        WHERE u.user_id = #{userId, typeHandler=com.ingresso.userservice.config.UuidBinaryTypeHandler}
+        WHERE u.user_id = #{userId, typeHandler=com.lorenzovendrame.identityservice.config.UuidBinaryTypeHandler}
     </select>
 
 </mapper>

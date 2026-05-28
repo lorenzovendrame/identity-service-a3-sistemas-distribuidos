@@ -1,4 +1,4 @@
-package com.lorenzovendrame.identityservice.repository.domain;
+package com.lorenzovendrame.identityservice.domain;
 
 import java.util.List;
 import java.util.Objects;
