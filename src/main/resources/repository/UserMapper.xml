@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.lorenzovendrame.identityservice.mapper.UserMapper">
+<mapper namespace="com.lorenzovendrame.identityservice.repository.UserMapper">
 
     <insert id="insertAddress" keyProperty="addressId">
         INSERT INTO Address (address.address_id, city, state, district, cep, street_name, building_number, details)
-        VALUES (#{addressId, typeHandler=com.lorenzovendrame.identityservice.config.UuidBinaryTypeHandler}, #{city}, #{state},
-                #{district}, #{cep}, #{streetName}, #{buildingNumber}, #{details})
+        VALUES (#{addressId, typeHandler=com.lorenzovendrame.identityservice.config.UuidBinaryTypeHandler}, #{city},
+                #{state}, #{district}, #{cep}, #{streetName}, #{buildingNumber}, #{details})
     </insert>
 
     <insert id="insertUser" keyProperty="userId">
@@ -17,7 +17,8 @@
 
     <insert id="insertUserRole">
         INSERT INTO User_Roles (user_id, role_id)
-        VALUES (#{userId, typeHandler=com.lorenzovendrame.identityservice.config.UuidBinaryTypeHandler}, #{roleId})
+        VALUES (#{userId, typeHandler=com.lorenzovendrame.identityservice.config.UuidBinaryTypeHandler},
+                #{roleId, typeHandler=com.lorenzovendrame.identityservice.config.UuidBinaryTypeHandler})
     </insert>
 
     <update id="updateUser">
