@@ -2,7 +2,7 @@ package com.lorenzovendrame.identityservice.service;
 
 import com.fasterxml.uuid.Generators;
 import com.lorenzovendrame.identityservice.domain.User;
-import com.lorenzovendrame.identityservice.mapper.UserMapper;
+import com.lorenzovendrame.identityservice.repository.UserMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

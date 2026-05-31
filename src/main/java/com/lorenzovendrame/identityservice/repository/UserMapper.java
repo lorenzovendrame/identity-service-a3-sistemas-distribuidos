@@ -1,4 +1,4 @@
-package com.lorenzovendrame.identityservice.mapper;
+package com.lorenzovendrame.identityservice.repository;
 
 import com.lorenzovendrame.identityservice.domain.Address;
 import com.lorenzovendrame.identityservice.domain.User;
@@ -18,6 +18,5 @@ public interface UserMapper {
 
     void deleteUserRoles(UUID userId);
 
-    // Consulta (Mapeada no XML por conta dos JOINS complexos)
     Optional<User> findById(UUID userId);
 }
