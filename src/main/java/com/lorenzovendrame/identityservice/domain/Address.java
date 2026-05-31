@@ -83,4 +83,19 @@ public class Address {
     public int hashCode() {
         return Objects.hash(addressId);
     }
+
+    @Override
+    public String toString() {
+        return "Address {\n" +
+                "  addressId = " + addressId + ",\n" +
+                "  city = '" + city + "',\n" +
+                "  state = '" + state + "',\n" +
+                "  district = '" + district + "',\n" +
+                "  cep = '" + cep + "',\n" +
+                "  streetName = '" + streetName + "',\n" +
+                "  buildingNumber = '" + buildingNumber + "',\n" +
+                "  details = '" + details + "'\n" +
+                "}";
+    }
+
 }
