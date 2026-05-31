@@ -42,4 +42,13 @@ public class Permission {
     public int hashCode() {
         return Objects.hash(permissionId);
     }
+
+    @Override
+    public String toString() {
+        return "Permission {\n" +
+                "  permissionId = " + permissionId + ",\n" +
+                "  permissionName= '" + permissionName + ",\n" +
+                "  description = '" + description + ",\n" +
+                '}';
+    }
 }

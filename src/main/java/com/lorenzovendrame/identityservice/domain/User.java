@@ -76,8 +76,8 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public Address getAddress()
-    { return address;
+    public Address getAddress(){
+        return address;
     }
     public void setAddress(Address address){
         this.address = address;
@@ -102,4 +102,20 @@ public class User {
     public int hashCode() {
         return Objects.hash(userId);
     }
+
+    @Override
+    public String toString() {
+        return "User {\n" +
+                "  userId = " + userId + ",\n" +
+                "  name = '" + name + "',\n" +
+                "  cpf = '" + cpf + "',\n" +
+                "  email = '" + email + "',\n" +
+                "  phoneNumber = '" + phoneNumber + "',\n" +
+                "  dateOfBirth = " + dateOfBirth + ",\n" +
+                "  createdAt = " + createdAt + ",\n" +
+                "  address = " + (address != null ? address.toString().replace("\n", "\n  ") : "null") + ",\n" +
+                "  roles = " + roles + "\n" +
+                "}";
+    }
+
 }
