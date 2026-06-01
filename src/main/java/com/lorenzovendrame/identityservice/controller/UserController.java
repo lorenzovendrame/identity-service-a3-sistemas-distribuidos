@@ -43,4 +43,13 @@ public class UserController {
         userService.updateUserRoles(id, roleIds);
         return ResponseEntity.ok("Papéis do usuário atualizados com sucesso.");
     }
+
+    @GetMapping("/get")
+    public ResponseEntity<UserResponseDTO> getUser(@RequestParam UUID id){
+        User user = userService.getUser(id);
+
+        UserResponseDTO userResponse = new UserResponseDTO(user, id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+    }
 }

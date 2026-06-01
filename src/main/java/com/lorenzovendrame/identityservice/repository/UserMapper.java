@@ -15,7 +15,7 @@ public interface UserMapper {
 
     void updateUser(User user);
     void updateAddress(Address address);
-
+    boolean existsByEmail(String email);
     void deleteUserRoles(UUID userId);
 
     Optional<User> findById(UUID userId);
