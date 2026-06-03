@@ -36,6 +36,14 @@
         WHERE address_id = #{addressId}
     </update>
 
+    <select id="existsByEmail" resultType="boolean">
+        SELECT EXISTS(
+            SELECT 1
+            FROM Users
+            WHERE email = #{email}
+        )
+    </select>
+
     <delete id="deleteUserRoles">
         DELETE FROM User_Roles
                WHERE user_id = #{userId}
@@ -56,8 +64,11 @@
             <id property="addressId" column="address_id" typeHandler="com.lorenzovendrame.identityservice.config.UuidBinaryTypeHandler"/>
             <result property="city" column="city"/>
             <result property="state" column="state"/>
+            <result property="district" column="district"/>
             <result property="cep" column="cep"/>
             <result property="streetName" column="street_name"/>
+            <result property="buildingNumber" column="building_number"/>
+            <result property="details" column="details"/>
         </association>
 
         <!-- Coleção 1:N com Roles -->

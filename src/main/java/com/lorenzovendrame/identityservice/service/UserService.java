@@ -2,6 +2,8 @@ package com.lorenzovendrame.identityservice.service;
 
 import com.fasterxml.uuid.Generators;
 import com.lorenzovendrame.identityservice.domain.User;
+import com.lorenzovendrame.identityservice.exception.BusinessException;
+import com.lorenzovendrame.identityservice.exception.ResourceNotFoundException;
 import com.lorenzovendrame.identityservice.repository.UserMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,10 @@ public class UserService {
 
     @Transactional
     public User createUser(User user) {
+
+        if (userMapper.existsByEmail(user.getEmail())) {
+            throw new BusinessException("Este e-mail já está cadastrado no sistema.");
+        }
 
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
@@ -45,7 +51,7 @@ public class UserService {
     @Transactional
     public User updateUserData(UUID userId, User userUpdates) {
         User existingUser = userMapper.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário com ID " + userId + " não encontrado"));
 
         existingUser.setName(userUpdates.getName());
         existingUser.setEmail(userUpdates.getEmail());
@@ -64,12 +70,17 @@ public class UserService {
     @Transactional
     public void updateUserRoles(UUID userId, List<Long> roleIds) {
 
-        userMapper.findById(userId).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
+        userMapper.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário com ID " + userId + " não encontrado"));
 
         userMapper.deleteUserRoles(userId);
         for (Long roleId : roleIds) {
             userMapper.insertUserRole(userId, roleId);
         }
+    }
+
+    public User getUser(UUID userId){
+        return userMapper.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário com ID " + userId + " não encontrado"));
     }
 }
