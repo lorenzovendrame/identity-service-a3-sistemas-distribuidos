@@ -19,4 +19,5 @@ public interface UserMapper {
     void deleteUserRoles(UUID userId);
 
     Optional<User> findById(UUID userId);
+    Optional<User> findByEmail(String email);
 }
