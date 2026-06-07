@@ -57,6 +57,7 @@
         <result property="email" column="email"/>
         <result property="phoneNumber" column="phone_number"/>
         <result property="dateOfBirth" column="date_of_birth"/>
+        <result property="password" column="password"/>
         <result property="createdAt" column="created_at"/>
 
         <!-- Associação 1:1 com Endereço -->
@@ -91,6 +92,17 @@
                  LEFT JOIN Role_Permissions rp ON r.role_id = rp.role_id
                  LEFT JOIN Permissions p ON rp.permission_id = p.permission_id
         WHERE u.user_id = #{userId}
+    </select>
+
+    <select id="findByEmail" resultMap="UserResultMap">
+        SELECT u.*, a.*, r.*, p.*
+        FROM Users u
+                 LEFT JOIN Address a ON u.address_id = a.address_id
+                 LEFT JOIN User_Roles ur ON u.user_id = ur.user_id
+                 LEFT JOIN Roles r ON ur.role_id = r.role_id
+                 LEFT JOIN Role_Permissions rp ON r.role_id = rp.role_id
+                 LEFT JOIN Permissions p ON rp.permission_id = p.permission_id
+        WHERE u.email = #{email}
     </select>
 
 </mapper>
