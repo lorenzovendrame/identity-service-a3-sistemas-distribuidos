@@ -18,19 +18,8 @@ CREATE TABLE `address` (
 CREATE TABLE `permissions` (
                                `permission_id` int NOT NULL,
                                `permission_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-                               `description` varchar(100) DEFAULT NULL,
+                               `permission_description` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
                                PRIMARY KEY (`permission_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-
--- `identity`.role_permissions definition
-
-CREATE TABLE `role_permissions` (
-                                    `role_id` int NOT NULL,
-                                    `permission_id` int NOT NULL,
-                                    PRIMARY KEY (`role_id`,`permission_id`),
-                                    KEY `role_permissions_permissions_FK` (`permission_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -39,18 +28,20 @@ CREATE TABLE `role_permissions` (
 CREATE TABLE `roles` (
                          `role_id` int NOT NULL,
                          `role_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-                         `description` varchar(100) DEFAULT NULL,
+                         `role_description` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
                          PRIMARY KEY (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- `identity`.user_roles definition
+-- `identity`.role_permissions definition
 
-CREATE TABLE `user_roles` (
-                              `user_id` int NOT NULL,
-                              `role_id` int NOT NULL,
-                              PRIMARY KEY (`user_id`,`role_id`),
-                              KEY `user_roles_roles_FK` (`role_id`)
+CREATE TABLE `role_permissions` (
+                                    `role_id` int NOT NULL,
+                                    `permission_id` int NOT NULL,
+                                    PRIMARY KEY (`role_id`,`permission_id`),
+                                    KEY `role_permissions_permissions_fk` (`permission_id`),
+                                    CONSTRAINT `role_permissions_permissions_fk` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`permission_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+                                    CONSTRAINT `role_permissions_roles_fk` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE CASCADE ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -69,4 +60,16 @@ CREATE TABLE `users` (
                          PRIMARY KEY (`user_id`),
                          KEY `users_address_FK` (`address_id`),
                          CONSTRAINT `users_address_FK` FOREIGN KEY (`address_id`) REFERENCES `address` (`address_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- `identity`.user_roles definition
+
+CREATE TABLE `user_roles` (
+                              `user_id` binary(16) NOT NULL,
+                              `role_id` int NOT NULL,
+                              PRIMARY KEY (`user_id`,`role_id`),
+                              KEY `user_roles_roles_fk` (`role_id`),
+                              CONSTRAINT `user_roles_roles_fk` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+                              CONSTRAINT `user_roles_users_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

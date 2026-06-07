@@ -14,15 +14,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.Optional;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final Optional<JwtAuthenticationFilter> jwtFilter;
+    private final Optional<GatewayHeaderAuthenticationFilter> gatewayFilter;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    public SecurityConfig(Optional<JwtAuthenticationFilter> jwtFilter,
+                          Optional<GatewayHeaderAuthenticationFilter> gatewayFilter) {
+        this.jwtFilter = jwtFilter;
+        this.gatewayFilter = gatewayFilter;
     }
 
     @Bean
@@ -31,21 +36,22 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll() // Cadastro público
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
-                )
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-                // INJETA O SEU FILTRO DO GATEWAY antes do filtro padrão de autenticação do Spring
-                //.addFilterBefore(new GatewayHeaderAuthenticationFilter(),
-                //        org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
+                );
+
+        jwtFilter.ifPresent(filter ->
+                http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class));
+
+        gatewayFilter.ifPresent(filter ->
+                http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class));
 
         return http.build();
     }

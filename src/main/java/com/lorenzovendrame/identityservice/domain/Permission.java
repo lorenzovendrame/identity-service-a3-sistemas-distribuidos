@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Permission {
     private Long permissionId;
     private String permissionName;
-    private String description;
+    private String permissionDescription;
 
     public Permission(){}
 
@@ -23,11 +23,11 @@ public class Permission {
         this.permissionName = permissionName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getPermissionDescription() {
+        return permissionDescription;
     }
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPermissionDescription(String permissionDescription) {
+        this.permissionDescription = permissionDescription;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class Permission {
         return "Permission {\n" +
                 "  permissionId = " + permissionId + ",\n" +
                 "  permissionName= '" + permissionName + ",\n" +
-                "  description = '" + description + ",\n" +
+                "  permissionDescription = '" + permissionDescription + ",\n" +
                 '}';
     }
 }

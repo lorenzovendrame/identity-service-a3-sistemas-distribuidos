@@ -76,9 +76,11 @@
         <collection property="roles" ofType="com.lorenzovendrame.identityservice.domain.Role">
             <id property="roleId" column="role_id"/>
             <result property="roleName" column="role_name"/>
+            <result property="roleDescription" column="role_description"/>
             <collection property="permissions" ofType="com.lorenzovendrame.identityservice.domain.Permission">
                 <id property="permissionId" column="permission_id"/>
                 <result property="permissionName" column="permission_name"/>
+                <result property="permissionDescription" column="permission_description"/>
             </collection>
         </collection>
     </resultMap>

@@ -6,7 +6,7 @@ import java.util.Objects;
 public class Role {
     private Long roleId;
     private String roleName;
-    private String description;
+    private String roleDescription;
     private List<Permission> permissions;
 
     public Role() {}
@@ -25,11 +25,11 @@ public class Role {
         this.roleName = roleName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getRoleDescription() {
+        return roleDescription;
     }
-    public void setDescription(String description) {
-        this.description = description;
+    public void setRoleDescription(String roleDescription) {
+        this.roleDescription = roleDescription;
     }
 
     public List<Permission> getPermissions() {
@@ -56,7 +56,8 @@ public class Role {
     public String toString() {
         return "Role {\n" +
                 "  roleId = " + roleId + ",\n" +
-                "  roleName = '" + roleName + "',\n" +
+                "  roleName = " + roleName + ",\n" +
+                "  roleDescription = " + roleDescription + ",\n" +
                 "  permissions = " + permissions + "\n" +
                 "}";
     }

@@ -3,6 +3,7 @@ package com.lorenzovendrame.identityservice.controller;
 import com.lorenzovendrame.identityservice.config.JwtUtil;
 import com.lorenzovendrame.identityservice.dto.LoginRequest;
 import com.lorenzovendrame.identityservice.dto.TokenResponse;
+import com.lorenzovendrame.identityservice.service.CustomUserDetails;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,17 +28,14 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest) {
 
-        // 1. O Spring Security vai pegar esse email e senha, vai chamar o seu
-        // CustomUserDetailsService, buscar no banco e comparar as senhas automaticamente.
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password())
         );
 
-        // 2. Se a senha estiver errada, o Spring joga uma exceção antes de chegar aqui.
-        // Se chegar aqui, o usuário está autenticado com sucesso!
-        String token = jwtUtil.generateToken(authentication.getName());
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        // 3. Retorna o token dentro do nosso DTO
+        String token = jwtUtil.generateToken(userDetails);
+
         return ResponseEntity.ok(new TokenResponse(token));
     }
 }
