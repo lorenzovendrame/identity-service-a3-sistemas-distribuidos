@@ -5,6 +5,7 @@ import com.lorenzovendrame.identityservice.dto.UserResponseDTO;
 import com.lorenzovendrame.identityservice.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or #id.toString() == authentication.name")
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable UUID id, @RequestBody User user) {
         User updated = userService.updateUserData(id, user);
 
@@ -39,12 +41,14 @@ public class UserController {
     }
 
     @PutMapping("/{id}/roles")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> changeRoles(@PathVariable UUID id, @RequestBody List<Long> roleIds) {
         userService.updateUserRoles(id, roleIds);
         return ResponseEntity.ok("Papéis do usuário atualizados com sucesso.");
     }
 
     @GetMapping("/get")
+    @PreAuthorize("hasRole('ADMIN') or #id.toString() == authentication.name")
     public ResponseEntity<UserResponseDTO> getUser(@RequestParam UUID id){
         User user = userService.getUser(id);
 
