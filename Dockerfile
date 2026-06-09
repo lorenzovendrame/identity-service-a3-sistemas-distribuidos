@@ -1,23 +1,22 @@
-FROM maven:3.9.6-eclipse-temurin-25-alpine AS build
+FROM maven:3.9.6-eclipse-temurin-21-alpine AS build
 LABEL authors="Lorenzo"
 
 WORKDIR /app
 
 COPY pom.xml .
-
 RUN mvn dependency:go-offline
 
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-FROM eclipse-temurin:25-alpine
+FROM eclipse-temurin:21-alpine
 
 WORKDIR /app
 
-COPY --from=build /app/target/identity-service.jar identity-service.jar
-
 RUN apk add --no-cache tzdata
 ENV TZ=America/Sao_Paulo
+
+COPY --from=build /app/target/identity-service*.jar identity-service.jar
 
 EXPOSE 8080
 
