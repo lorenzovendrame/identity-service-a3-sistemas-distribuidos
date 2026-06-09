@@ -4,33 +4,33 @@
 <mapper namespace="com.lorenzovendrame.identityservice.repository.UserMapper">
 
     <insert id="insertAddress" keyProperty="addressId">
-        INSERT INTO Address (address.address_id, city, state, district, cep, street_name,
+        INSERT INTO address (address.address_id, city, state, district, cep, street_name,
                              building_number, details)
         VALUES (#{addressId}, #{city}, #{state}, #{district}, #{cep}, #{streetName},
                 #{buildingNumber}, #{details})
     </insert>
 
     <insert id="insertUser" keyProperty="userId">
-        INSERT INTO Users (user_id, name, cpf, address_id, email, phone_number, date_of_birth,
+        INSERT INTO users (user_id, name, cpf, address_id, email, phone_number, date_of_birth,
                            password, created_at)
         VALUES (#{userId}, #{name}, #{cpf}, #{address.addressId}, #{email}, #{phoneNumber},
                 #{dateOfBirth}, #{password}, NOW())
     </insert>
 
     <insert id="insertUserRole">
-        INSERT INTO User_Roles (user_id, role_id)
+        INSERT INTO user_roles (user_id, role_id)
         VALUES (#{userId},
                 #{roleId})
     </insert>
 
     <update id="updateUser">
-        UPDATE Users
+        UPDATE users
         SET name = #{name}, phone_number = #{phoneNumber}, email = #{email}
         WHERE user_id = #{userId}
     </update>
 
     <update id="updateAddress">
-        UPDATE Address
+        UPDATE address
         SET city = #{city}, state = #{state}, district = #{district}, cep = #{cep},
             street_name = #{streetName}, building_number = #{buildingNumber}, details = #{details}
         WHERE address_id = #{addressId}
@@ -39,13 +39,13 @@
     <select id="existsByEmail" resultType="boolean">
         SELECT EXISTS(
             SELECT 1
-            FROM Users
+            FROM users
             WHERE email = #{email}
         )
     </select>
 
     <delete id="deleteUserRoles">
-        DELETE FROM User_Roles
+        DELETE FROM user_roles
                WHERE user_id = #{userId}
     </delete>
 
@@ -87,23 +87,23 @@
 
     <select id="findById" resultMap="UserResultMap">
         SELECT u.*, a.*, r.*, p.*
-        FROM Users u
-                 LEFT JOIN Address a ON u.address_id = a.address_id
-                 LEFT JOIN User_Roles ur ON u.user_id = ur.user_id
-                 LEFT JOIN Roles r ON ur.role_id = r.role_id
-                 LEFT JOIN Role_Permissions rp ON r.role_id = rp.role_id
-                 LEFT JOIN Permissions p ON rp.permission_id = p.permission_id
+        FROM users u
+                 LEFT JOIN address a ON u.address_id = a.address_id
+                 LEFT JOIN user_roles ur ON u.user_id = ur.user_id
+                 LEFT JOIN roles r ON ur.role_id = r.role_id
+                 LEFT JOIN role_permissions rp ON r.role_id = rp.role_id
+                 LEFT JOIN permissions p ON rp.permission_id = p.permission_id
         WHERE u.user_id = #{userId}
     </select>
 
     <select id="findByEmail" resultMap="UserResultMap">
         SELECT u.*, a.*, r.*, p.*
-        FROM Users u
-                 LEFT JOIN Address a ON u.address_id = a.address_id
-                 LEFT JOIN User_Roles ur ON u.user_id = ur.user_id
-                 LEFT JOIN Roles r ON ur.role_id = r.role_id
-                 LEFT JOIN Role_Permissions rp ON r.role_id = rp.role_id
-                 LEFT JOIN Permissions p ON rp.permission_id = p.permission_id
+        FROM users u
+                 LEFT JOIN address a ON u.address_id = a.address_id
+                 LEFT JOIN user_roles ur ON u.user_id = ur.user_id
+                 LEFT JOIN roles r ON ur.role_id = r.role_id
+                 LEFT JOIN role_permissions rp ON r.role_id = rp.role_id
+                 LEFT JOIN permissions p ON rp.permission_id = p.permission_id
         WHERE u.email = #{email}
     </select>
 
